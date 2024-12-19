@@ -1,0 +1,18 @@
+-- Fahrzeug Spawner Script (FiveM)
+RegisterCommand("car", function(source, args, rawCommand)
+    local vehicleName = args[1] or "adder"  -- Standardfahrzeug ist "adder", wenn kein Name angegeben ist
+
+    -- Sicherstellen, dass der Spieler ein Fahrzeug spawnen kann
+    local playerPed = GetPlayerPed(-1)
+    local playerPos = GetEntityCoords(playerPed)
+
+    -- Fahrzeug erstellen
+    RequestModel(vehicleName)
+    while not HasModelLoaded(vehicleName) do
+        Wait(500)  -- Warten, bis das Fahrzeugmodell geladen ist
+    end
+
+    local vehicle = CreateVehicle(vehicleName, playerPos.x, playerPos.y, playerPos.z, GetEntityHeading(playerPed), true, false)
+    SetPedIntoVehicle(playerPed, vehicle, -1)  -- Spieler ins Fahrzeug setzen
+    SetModelAsNoLongerNeeded(vehicleName)  -- Modell als nicht mehr benötigt kennzeichnen
+end, false)
